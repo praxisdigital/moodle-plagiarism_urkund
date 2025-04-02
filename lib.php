@@ -2493,37 +2493,3 @@ function plagiarism_get_errorcode_from_jsonresponse($errorresponse) {
     }
     return null;
 }
-
-/**
- * Add resubmit button to overall grading pages.
- *
- */
-function plagiarism_urkund_before_standard_top_of_body_html() {
-    global $PAGE, $OUTPUT, $DB;
-    if (!$PAGE->context instanceof \context_module) {
-        return;
-    }
-    if (!has_capability('plagiarism/urkund:resubmitallfiles', $PAGE->context)) {
-        return;
-    }
-    if ($PAGE->url->compare(new moodle_url('/mod/quiz/report.php'), URL_MATCH_BASE)) {
-        $module = 'quiz';
-    } else if ($PAGE->url->compare(new moodle_url('/mod/assign/view.php'), URL_MATCH_BASE)) {
-        $module = 'assign';
-    } else {
-        return;
-    }
-    if (empty(get_config('plagiarism_urkund', 'enable_mod_' . $module))) {
-        return;
-    }
-
-    $useurkund = $DB->get_field('plagiarism_urkund_config', 'value',
-        array('cm' => $PAGE->context->instanceid, 'name' => 'use_urkund'));
-    if (empty($useurkund)) {
-        return;
-    }
-
-    $url = new moodle_url('/plagiarism/urkund/reset.php', array('cmid' => $PAGE->context->instanceid, 'resetall' => 1));
-    $button = $OUTPUT->single_button($url, get_string('resubmittourkund', 'plagiarism_urkund'));
-    $PAGE->set_button($PAGE->button . html_writer::div($button), 'urkundresubmit');
-}
