@@ -4,6 +4,8 @@
 
 Ouriginal (Previously called Urkund) is a commercial plagiarism prevention product - you must have a paid subscription to be able to use this plugin.
 
+Moodle component: `plagiarism_urkund`. This branch requires Moodle 4.3 or later and has no Moodle plugin dependencies.
+
 Supported branches
 --------
 The git branches here support the following versions.
@@ -13,6 +15,7 @@ The git branches here support the following versions.
 | Moodle 3.5 to 3.8 | MOODLE_38_STABLE | 7.0+ | Security fixes only - these versions are no longer supported by Moodle. |
 | Moodle 3.9 to 3.11 | MOODLE_39_STABLE | 7.2+ |
 | Moodle 4.0 | MOODLE_400_STABLE | 7.2+ |
+| Moodle 4.3+ | MOODLE_403_STABLE | 8.0+ | Use a PHP version supported by your Moodle release. |
 
 ## Quiz - Essay question support for versions prior to 3.10
 The latest version of this plugin provides support for essay questions within the quiz activity, however Moodle versions prior to 3.10 don't
@@ -29,4 +32,9 @@ If you are unfamiliar with using a git patch, you may need to wait unti Moodle i
 
 For more information see: https://docs.moodle.org/en/Plagiarism_Prevention_Ouriginal
 
+## Change log
 
+* **4.0.6 (2026112000)**
+    - Fixed malformed Ouriginal responses interrupting submission pages. The existing warning and Reset link still appear for teachers with reset permission. ([#1171](https://github.com/praxisdigital/moodle-opgaver/issues/1171))
+    - Added automated tests for error response parsing and display.
+    - Updated GitHub Actions to use the shared Moodle CI workflow.
