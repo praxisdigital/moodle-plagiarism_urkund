@@ -37,4 +37,3 @@ For more information see: https://docs.moodle.org/en/Plagiarism_Prevention_Ourig
 * **4.0.6 (2026112000)**
     - Fixed malformed Ouriginal responses interrupting submission pages. The existing warning and Reset link still appear for teachers with reset permission. ([#1171](https://github.com/praxisdigital/moodle-opgaver/issues/1171))
     - Added automated tests for error response parsing and display.
-    - Updated GitHub Actions to use the shared Moodle CI workflow.
