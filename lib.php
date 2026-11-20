@@ -27,6 +27,8 @@
 
 defined('MOODLE_INTERNAL') || die();
 
+use plagiarism_urkund\app\submission\error_response_parser;
+
 // Get global class.
 global $CFG;
 require_once($CFG->dirroot.'/plagiarism/lib.php');
@@ -328,16 +330,7 @@ class plagiarism_plugin_urkund extends plagiarism_plugin {
             if (has_capability('plagiarism/urkund:resetfile', $modulecontext) &&
                 !empty($results['error'])) { // This is a teacher viewing the responses.
 
-                $json = json_decode($results['error']);
-                if (json_last_error() == JSON_ERROR_NONE) {
-                    $last = end($json); // When multiple results, the last one is the important one.
-                    $errorcode = (int)$last->Status->ErrorCode;
-                } else {
-                    // This is an old error - might be stored in XML.
-                    $xml = simplexml_load_string($results['error']);
-                    $errorcode = (int)$xml->SubmissionData->Status->ErrorCode;
-                }
-
+                $errorcode = error_response_parser::from_stored_response($results['error']);
                 if (!empty($errorcode)) {
                     $errormessage = plagiarism_urkund_get_error_string($errorcode);
                 } else {
@@ -2479,17 +2472,9 @@ function plagiarism_urkund_get_error_string($errorcode) {
 /**
  * Get code from JSON response.
  *
- * @param string $errorresponse - errorresponse from URKUND API.
- * @return lang_string|string|void|null
- * @throws coding_exception
+ * @param mixed $errorresponse Error response from the Urkund API or transport.
+ * @return int|null The error code, if present.
  */
-function plagiarism_get_errorcode_from_jsonresponse($errorresponse) {
-    $json = json_decode($errorresponse);
-    if (json_last_error() == JSON_ERROR_NONE) {
-        $last = end($json); // When multiple results, the last one is the important one.
-        if (!empty($last->Status->ErrorCode)) {
-            return (int)$last->Status->ErrorCode;
-        }
-    }
-    return null;
+function plagiarism_get_errorcode_from_jsonresponse($errorresponse): ?int {
+    return error_response_parser::from_json($errorresponse);
 }
